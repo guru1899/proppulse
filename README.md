@@ -2,6 +2,8 @@
 
 A local, responsive prop-firm futures account tracker.
 
+This folder contains the complete portable PropPulse project, including its SQLite database.
+
 ## Run it
 
 ```powershell
