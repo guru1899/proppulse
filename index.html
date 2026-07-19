@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PropPulse — Futures Account Tracker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <section class="auth-shell" id="authShell">
+      <div class="auth-card"><a class="brand" href="#"><span class="pulse">⌁</span>Prop<span>Pulse</span></a><p class="eyebrow">YOUR PROP-FIRM CONTROL ROOM</p><h1 id="authTitle">Welcome back</h1><p id="authText">Sign in to your trading desk.</p><div class="auth-tabs"><button type="button" class="auth-tab active" data-auth-mode="login">Sign in</button><button type="button" class="auth-tab" data-auth-mode="signup">Create account</button><button type="button" class="auth-tab" data-auth-mode="admin">Admin</button></div><form id="authForm"><label class="input-label auth-name hidden">Your name<input id="authName" autocomplete="name" /></label><label class="input-label">Username<input id="authUsername" autocomplete="username" required /></label><label class="input-label">Password<input id="authPassword" type="password" autocomplete="current-password" required /></label><button class="btn primary full" id="authSubmit" type="submit">Sign in</button><p class="auth-error" id="authError"></p></form></div>
+    </section>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <a class="brand" href="#dashboard"><span class="pulse">⌁</span>Prop<span>Pulse</span></a>
+        <p class="workspace-label">YOUR TRADING DESK</p>
+        <nav class="nav" aria-label="Main navigation">
+          <button class="nav-link active" data-page="dashboard"><i>⌂</i> Overview</button>
+          <button class="nav-link" data-page="accounts"><i>▣</i> Accounts</button>
+          <button class="nav-link" data-page="balances"><i>↕</i> Daily balances</button>
+          <button class="nav-link" data-page="rules"><i>◇</i> Firm rules</button>
+          <button class="nav-link" data-page="payouts"><i>$</i> Withdrawals</button>
+          <button class="nav-link" data-page="profile"><i>◉</i> Profile</button>
+        </nav>
+        <div class="guru-card"><span class="avatar">G</span><div><strong>Guru</strong><small>Trading desk</small></div><span class="live-dot"></span></div>
+      </aside>
+
+      <main class="main">
+        <header class="topbar">
+          <div class="mobile-brand">Prop<span>Pulse</span></div>
+          <div class="date-chip">◷ <span id="todayLabel"></span></div>
+          <button class="btn primary quick-import" data-go="balances">↑ Import balances</button>
+        </header>
+
+        <section class="page active" id="dashboard">
+          <div class="page-heading"><div><p class="eyebrow">CONTROL ROOM</p><h1>Account overview</h1><p>One clear view of every prop-firm account and its safety buffer.</p></div><button class="btn ghost" data-go="accounts">+ Add account</button></div>
+          <div class="metric-strip" id="metricStrip"></div>
+          <div class="dashboard-grid">
+            <article class="panel accounts-panel"><div class="panel-heading"><div><h2>Funded accounts</h2><p>Today’s end-of-day position</p></div><button class="text-btn" data-go="accounts">View all →</button></div><div class="account-table-wrap"><table><thead><tr><th>Account name</th><th>Prop firm</th><th>Live balance</th><th>Buffer remaining</th><th>DD left</th><th>Benchmark</th><th>Status</th></tr></thead><tbody id="dashboardRows"></tbody></table></div></article>
+            <article class="panel action-panel"><span class="round-icon">↑</span><p class="eyebrow">DAILY ROUTINE</p><h2>Update your balances</h2><p>Enter account balances manually or import a CSV after the market close.</p><ul><li>Choose one trading date</li><li>CSV needs only account ID and balance</li><li>We calculate daily P/L and safety limits</li></ul><button class="btn primary full" data-go="balances">Import today’s balances</button></article>
+            <article class="panel chart-panel"><div class="panel-heading"><div><h2>Portfolio equity</h2><p>Total recorded account balance</p></div><span class="pill neutral">Last 7 entries</span></div><div class="chart" id="equityChart"><div class="chart-grid"></div><svg viewBox="0 0 800 190" preserveAspectRatio="none"><defs><linearGradient id="fill" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#22c983" stop-opacity=".23"/><stop offset="1" stop-color="#22c983" stop-opacity="0"/></linearGradient></defs><path class="area"/><path class="line"/></svg><div class="chart-labels"><span>Recent</span><strong id="chartValue">—</strong><span>Today</span></div></div></article>
+            <article class="panel risk-panel"><div class="panel-heading"><div><h2>Needs attention</h2><p>Accounts closest to their limits</p></div></div><div id="riskList" class="risk-list"></div></article>
+          </div>
+        </section>
+
+        <section class="page" id="balances">
+          <div class="page-heading"><div><p class="eyebrow">DAILY TRACKING</p><h1>Import balances</h1><p>Select the date once. Your CSV contains only <code>account_id,balance</code>.</p></div></div>
+          <div class="import-layout">
+            <article class="panel import-card"><label class="input-label">Trading date<input type="date" id="importDate" /></label><div class="mode-tabs"><button class="mode-tab active" data-mode="csv">Upload CSV</button><button class="mode-tab" data-mode="manual">Enter manually</button></div>
+              <div id="csvMode"><div class="dropzone" id="dropzone"><span class="round-icon">↑</span><h3>Drop your CSV here</h3><p>Required columns: <code>account_id,balance</code></p><input type="file" id="csvInput" accept=".csv,text/csv" hidden /><button class="btn primary" id="chooseCsv">Choose CSV file</button></div><div class="sample"><span>EXAMPLE CSV</span><code>account_id,balance<br>LT-25K-7481,24444.00<br>FN-50K-5623,49620.50</code></div></div>
+              <form id="manualMode" class="manual-form hidden"><label class="input-label">Account<select id="manualAccount"></select></label><label class="input-label">End-of-day balance<input id="manualBalance" type="number" step="0.01" min="0" placeholder="e.g. 24444.00" required /></label><button class="btn primary" type="submit">Add balance</button></form>
+            </article>
+            <article class="panel import-summary"><p class="eyebrow">IMPORT SUMMARY</p><div class="summary-row"><span class="round-icon small">◷</span><div><span>Selected date</span><strong id="selectedDate">—</strong></div></div><div class="summary-row"><span class="round-icon small">✓</span><div><span>Ready to import</span><strong id="readyCount">0 accounts</strong></div></div><div class="summary-row amber"><span class="round-icon small">!</span><div><span>Needs attention</span><strong id="issueCount">0 rows</strong></div></div><button class="btn primary full" id="confirmImport" disabled>Confirm import</button><p class="small-note">Existing balance records for the same account and date will be updated.</p></article>
+          </div>
+          <article class="panel preview-panel"><div class="panel-heading"><div><h2>Review balances</h2><p id="previewCaption">Choose a file to preview its account matches.</p></div></div><table><thead><tr><th>Account ID</th><th>Firm</th><th>Balance</th><th>Status</th></tr></thead><tbody id="previewRows"><tr class="empty"><td colspan="4">No balances ready to import.</td></tr></tbody></table></article>
+          <article class="panel history-panel"><div class="panel-heading"><div><h2>Balance history</h2><p>Latest end-of-day records</p></div></div><table><thead><tr><th>Date</th><th>Account</th><th>Balance</th><th>Daily P/L</th></tr></thead><tbody id="historyRows"></tbody></table></article>
+        </section>
+
+        <section class="page" id="accounts"><div class="page-heading"><div><p class="eyebrow">ACCOUNT DIRECTORY</p><h1>Your accounts</h1><p>Keep funded and evaluation accounts separate for easier tracking.</p></div><button class="btn primary" id="newAccountBtn">+ Add account</button></div><article class="panel account-section"><div class="panel-heading"><div><h2>Funded accounts</h2><p>Live accounts and payout readiness</p></div></div><table><thead><tr><th>Account name</th><th>Prop firm</th><th>Account size</th><th>DD warning</th><th>Last balance</th><th>Status</th><th></th></tr></thead><tbody id="fundedAccountRows"></tbody></table></article><article class="panel account-section"><div class="panel-heading"><div><h2>Evaluation accounts</h2><p>Accounts progressing toward their target</p></div></div><table><thead><tr><th>Account name</th><th>Prop firm</th><th>Account size</th><th>DD warning</th><th>Last balance</th><th>Status</th><th></th></tr></thead><tbody id="evaluationAccountRows"></tbody></table></article></section>
+        <section class="page" id="rules"><div class="page-heading"><div><p class="eyebrow">RISK ENGINE</p><h1>Firm rules</h1><p>First add a prop firm, then add its account type, account size, and rules.</p></div><div class="rule-header-actions"><button class="btn ghost" id="newFirmBtn">+ Add prop firm</button><button class="btn primary" id="newRuleBtn">+ Add rule set</button></div></div><div id="propFirmList" class="prop-firm-list"></div><div id="ruleCards" class="rule-grid"></div></section>
+        <section class="page" id="payouts"><div class="page-heading"><div><p class="eyebrow">PAYOUT TRACKER</p><h1>Withdrawals</h1><p>Record payouts and see the latest withdrawal for each account.</p></div><button class="btn primary" id="newWithdrawalBtn">+ Record withdrawal</button></div><article class="panel"><table><thead><tr><th>Date</th><th>Account</th><th>Amount</th></tr></thead><tbody id="withdrawalRows"></tbody></table></article></section>
+        <section class="page" id="profile"><div class="page-heading"><div><p class="eyebrow">ACCOUNT SETTINGS</p><h1>Profile</h1><p>Manage your local sign-in details.</p></div></div><article class="panel profile-card"><span class="profile-avatar" id="profileInitial">G</span><div><h2 id="profileName">Guru</h2><p id="profileUsername">@guru</p><span class="pill" id="profileRole">Member</span></div><button class="btn ghost" id="changePasswordBtn">Change password</button><button class="btn danger-btn" id="logoutBtn">Log out</button></article><article class="panel profile-note" id="adminNote"><h2>Administrator access</h2><p>You can add, edit, and delete prop-firm rule sets. These controls are hidden for normal accounts.</p></article></section>
+        <section class="page" id="account-detail"><div class="detail-heading"><button class="back-btn" data-go="accounts">← All accounts</button><div class="page-heading"><div><p class="eyebrow" id="detailStage">ACCOUNT</p><h1 id="detailTitle">Account</h1><p id="detailSubtitle"></p></div><span class="pill" id="detailStatus">—</span></div></div><div id="detailMetrics" class="detail-metrics"></div><article class="panel journey-panel"><div class="journey-labels"><span class="danger" id="journeyFloor">— floor</span><span>START</span><span class="positive" id="journeyTarget">— target</span></div><div class="journey-track"><span class="journey-start"></span><span class="journey-point" id="journeyPoint"></span></div><div class="journey-values"><div><strong id="journeyDd">—</strong><small>drawdown left</small></div><div><strong id="journeyBalance">—</strong><small>live balance</small></div><div><strong id="journeyRemaining">—</strong><small id="journeyRemainingLabel">remaining</small></div></div></article><article class="panel calendar-panel"><div class="calendar-head"><div><h2>Trading calendar</h2><p>Daily P/L from recorded end-of-day balances</p></div><div class="calendar-nav"><button id="prevMonth">←</button><strong id="calendarMonth">July 2026</strong><button id="nextMonth">→</button></div></div><div class="weekdays"><span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span></div><div class="calendar-grid" id="calendarGrid"></div></article></section>
+      </main>
+    </div>
+    <dialog id="formDialog"><form method="dialog" id="dialogForm"><div class="dialog-head"><h2 id="dialogTitle">Add account</h2><button class="close" type="button" id="dialogClose">×</button></div><div id="dialogFields"></div><div class="dialog-actions"><button class="btn ghost" type="button" id="dialogCancel">Cancel</button><button class="btn primary" id="dialogSave" value="default">Save</button></div></form></dialog>
+    <div class="toast" id="toast"></div>
+    <script src="app.js"></script>
+  </body>
+</html>
